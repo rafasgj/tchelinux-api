@@ -32,8 +32,9 @@ def connect_db():
     if api.testing:
         initstr = "sqlite:///{database}.sqlite"
     else:
-        api.config['DATABASE'] = DATABASE
-        initstr = "postgres+pg8000://{username}@localhost/{database}"
+        initstr = "sqlite:///{database}.sqlite"
+        # api.config['DATABASE'] = DATABASE
+        # initstr = "postgres+pg8000://{username}@localhost/{database}"
 
     initstr = initstr.format(username=USERNAME,
                              database=api.config['DATABASE'])
