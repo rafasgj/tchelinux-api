@@ -1,0 +1,21 @@
+/docs/
+
+# temporary files
+*.swp
+
+# Visual Studio Code
+/.vscode/
+
+# Python specific
+__pycache__/
+*.pyc
+*.pyo
+
+# Testing temporary files
+*.sqlite
+
+# Coverage files
+.coverage
+
+# macOS specific files.
+.DS_Store
