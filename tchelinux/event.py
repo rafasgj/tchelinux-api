@@ -75,7 +75,8 @@ def get_events():
     date = datetime.today()
     s = g.db.session
     Event = g.db.entity('events')
-    events = s.query(Event).filter(Event.date >= date)
+    events = s.query(Event).filter(Event.date >= date)\
+        .order_by(ascending(Event.date))
     for e in events:
         result.append(get_event_dictionary(e))
     return jsonify(result), 200
