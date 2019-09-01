@@ -10,29 +10,41 @@ from tchelinux.util import (extract_fields_from_request, save_object)
 event_api = Blueprint("events_api", __name__)
 
 
-def get_event_dictionary(event):
+def get_event_dictionary(data):
     """Get event dictionary from SQLAlchemy object."""
-    s = g.db.session
-    City = g.db.entity('cities')
-    Institution = g.db.entity('institutions')
     evt = {}
-    evt['date'] = event.date.strftime("%Y-%m-%d")
-    inst = s.query(Institution).filter(Institution.id == event.institution_id)
-    inst = inst.one()
-    ies = {"name": inst.name, "address": inst.address}
+    evt['date'] = data.events.date.strftime("%Y-%m-%d")
+    ies = {"name": data.institutions.name,
+           "address": data.institutions.address}
     evt['institution'] = ies
-    city = s.query(City).filter(City.cname == inst.city).one()
-    evt['cname'] = city.cname
-    evt['city'] = city.name
+    evt['cname'] = data.cities.cname
+    evt['city'] = data.cities.name
     return evt
 
 
-@event_api.route('/event', methods=['GET'])
-def get_next_event():
-    """Retrieve the next event."""
+def _query_next_events(city=None):
     Event = g.db.entity('events')
+    City = g.db.entity('cities')
+    Institution = g.db.entity('institutions')
     today = datetime.today()
-    q = g.db.session.query(Event).filter(Event.date >= today)
+    q = (g.db.session.query(Event, City, Institution)
+         .join(Institution, Institution.id == Event.institution_id)
+         .join(City, Institution.city == City.cname))
+    if city:
+        q = (q
+             .filter(Event.institution_id == Institution.id)
+             .filter(Institution.city == City.cname)
+             .filter((City.cname == city) | (City.name == city)))
+    q = q.filter(Event.date >= today)
+    return q
+
+
+@event_api.route('/event', methods=['GET'])
+@event_api.route('/event/<city>', methods=['GET'])
+def get_next_event(city=None):
+    """Retrieve the next event."""
+    q = _query_next_events(city)
+    Event = g.db.entity('events')
     event = q.order_by(ascending(Event.date)).first()
     return jsonify(get_event_dictionary(event)), 200
 
@@ -68,15 +80,13 @@ def post_event():
     return "OK", 201
 
 
-@event_api.route('/events', methods=['GET'])
+@event_api.route('/events')
 def get_events():
     """Retrieve events from the database."""
     result = []
-    date = datetime.today()
-    s = g.db.session
+    q = _query_next_events()
     Event = g.db.entity('events')
-    events = s.query(Event).filter(Event.date >= date)\
-        .order_by(ascending(Event.date))
+    events = q.order_by(ascending(Event.date))
     for e in events:
         result.append(get_event_dictionary(e))
     return jsonify(result), 200

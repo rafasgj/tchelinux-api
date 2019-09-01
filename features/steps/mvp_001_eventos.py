@@ -59,3 +59,9 @@ def _then_json_added_with_date_is(context, days):
 def _when_get_next_event(context):
     context.response = context.client.get('/event')
     verify_response(context.response, 200)
+
+
+@when('I ask for the next event in the city "{city}"')
+def _when_get_next_event_in_city(context, city):
+    context.response = context.client.get('/event/{}'.format(city))
+    verify_response(context.response, 200)
