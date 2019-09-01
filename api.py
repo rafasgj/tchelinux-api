@@ -7,24 +7,31 @@ from tchelinux.database import Database
 from tchelinux.city import city_api
 from tchelinux.institution import institution_api
 from tchelinux.event import event_api
+from tchelinux.user import user_api
 
-
-# Configuration
-DEBUG = True
-SECRET_KEY = 'development key'
-
-# Database Configuration
-DATABASE = 'tchelinuxcms'
-USERNAME = 'rafael'
-PASSWORD = ''
+from flask_jwt_extended import JWTManager
 
 
 api = Flask(__name__)
 api.config.from_object(__name__)
 
+# These should got into a unversioned configuration file.
+configuration = {
+    'JWT_SECRET_KEY': 'super-secret',
+    'DBUSERNAME': 'somebody',
+    'DATABASE': 'tchelinuxcms',
+}
+for k, v in configuration.items():
+    api.config[k] = v
+# /end of configuration
+
+# Setup the Flask-JWT-Extended extension
+jwt = JWTManager(api)
+
 api.register_blueprint(city_api)
 api.register_blueprint(institution_api)
 api.register_blueprint(event_api)
+api.register_blueprint(user_api)
 
 
 def connect_db():
@@ -36,7 +43,7 @@ def connect_db():
         # api.config['DATABASE'] = DATABASE
         # initstr = "postgres+pg8000://{username}@localhost/{database}"
 
-    initstr = initstr.format(username=USERNAME,
+    initstr = initstr.format(username=api.config['DBUSERNAME'],
                              database=api.config['DATABASE'])
     db = Database(initstr)
     try:

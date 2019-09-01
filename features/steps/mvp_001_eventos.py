@@ -3,9 +3,7 @@
 from behave import given, when, then
 import json
 from features.steps.common import verify_response, post_json_data
-# from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime, timedelta
-# from flask import request, jsonify
 
 
 @when('I create an event for "{institution}", {days:d} days from now')
@@ -50,8 +48,6 @@ def _then_json_added_with_date_is(context, days):
         expected[0]['date'] = date
     else:
         expected['date'] = date
-    print("OBSERVED", observed)
-    print("EXPECTED", expected)
     assert expected == observed
 
 

@@ -40,3 +40,13 @@ def _then_there_are_N_cities_in_database(context, table, count):
     db = connect_db()
     Entity = db.entity(table)
     assert db.session.query(Entity).count() == count
+
+
+@then('the operation succeeds')
+def _then_authentication_succeeds(context):
+    verify_response(context.response, 200)
+
+
+@then(u'the operation fails with code {http_code:d}')
+def _then_operation_fails_with_code(context, http_code):
+    verify_response(context.response, http_code)

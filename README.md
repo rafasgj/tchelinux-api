@@ -1,5 +1,32 @@
 # Tchelinux CMS API
 
+The Tchelinux CMS API main goal is to allow for easier management of
+Tchelinux's events.
+
+## Security
+
+Some API endpoints are not available for unauthorized access, some are only
+available for a small set of _administrator_ users. We use JWT (JSON Web Tokens)
+to verify access.
+
+## User
+
+Manages users and their attributes in the database.
+
+### Endpoints
+
+> /user
+
+* POST: Create a new user. The required fields are name, email and password.
+
+> /login
+
+* POST: Start a user session. The required fields are email and password.
+
+> /logout
+
+* GET: Terminates user session.
+
 ## City
 
 Manage cities in the database.
@@ -91,14 +118,6 @@ Manage events in the database.
 > /event
 * POST: Create a new event.
 
-> TODO: All the remaining endpoints are not yet implemented.
-
-> /events/<latitude>/<longitude>
-
-* GET: Retrieve the next programmed events closer than 150Km.
-
-> /events/<latitude>/<longitude>/<distance>
-
 * GET: Retrieve the next programmed events closer than a given distance.
 
 > /event
@@ -109,6 +128,14 @@ Manage events in the database.
 > /event/<city>
 
 * GET: Retrieve the next event programmed for the given city.
+
+> TODO: All the remaining endpoints are not yet implemented.
+
+> /events/<latitude>/<longitude>
+
+* GET: Retrieve the next programmed events closer than 150Km.
+
+> /events/<latitude>/<longitude>/<distance>
 
 ### Event Object Schema
 
