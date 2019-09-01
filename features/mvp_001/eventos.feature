@@ -5,7 +5,7 @@ Feature: List eventos.
     As a participant, I want to know which events occur near my city.
     As a participant, I want to know the details of a specific event.
 
-Scenario: Add an institutio to a database.
+Scenario: Add an event to the database.
     Given the city "Porto Alegre" with cname "poa" exists in the database
         And an institution exists in the database
             """
@@ -19,7 +19,7 @@ Scenario: Add an institutio to a database.
     When I create an event for "tchelinuxu", 120 days from now
     Then there is 1 item in the table events
 
-Scenario: Add an institutio to a database.
+Scenario: List next event.
     Given the city "Porto Alegre" with cname "poa" exists in the database
         And an institution exists in the database
             """
@@ -30,8 +30,30 @@ Scenario: Add an institutio to a database.
                 "city": "poa"
             }
             """
-    When I use JSON to add an event for "tchelinuxu", 120 days from now
-    Then there is 1 item in the table events
+        And the city "Novo Hamburgo" with cname "nh" exists in the database
+        And an institution exists in the database
+            """
+            {
+                "nick": "opensource",
+                "name": "Faculdades Open Source",
+                "address": "AV. Aberta, 765",
+                "city": "nh"
+            }
+            """
+        And there is an event for "tchelinuxu", 40 days from now
+        And there is an event for "opensource", 60 days from now
+    When I ask for the next event
+    Then with a date 40 days in the future, the resulting JSON is
+        """
+        {
+            "cname": "poa",
+            "city": "Porto Alegre",
+            "institution": {
+                "name": "Universidade Tchelinux",
+                "address": "R. Livre, 1234"
+            }
+        }
+        """
 
 Scenario: List next events.
     Given the city "Porto Alegre" with cname "poa" exists in the database

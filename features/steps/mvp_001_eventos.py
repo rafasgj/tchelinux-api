@@ -41,12 +41,21 @@ def _when_retrieving_events(context):
     verify_response(context.response, 200)
 
 
-@then(u'with a date {days:d} days in the future, the resulting JSON is')
+@then('with a date {days:d} days in the future, the resulting JSON is')
 def _then_json_added_with_date_is(context, days):
     observed = context.response.get_json(force=True)
     date = (datetime.today() + timedelta(days=days)).strftime("%Y-%m-%d")
     expected = json.loads(context.text)
-    expected[0]['date'] = date
+    if type(expected) == list:
+        expected[0]['date'] = date
+    else:
+        expected['date'] = date
     print("OBSERVED", observed)
     print("EXPECTED", expected)
     assert expected == observed
+
+
+@when('I ask for the next event')
+def _when_get_next_event(context):
+    context.response = context.client.get('/event')
+    verify_response(context.response, 200)

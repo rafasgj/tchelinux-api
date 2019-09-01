@@ -1,13 +1,40 @@
 """Events management endpoints."""
 
 from flask import (g, jsonify, Blueprint)
+from datetime import datetime
+from sqlalchemy import asc as ascending
 
 from tchelinux.util import (extract_fields_from_request, save_object)
 
-from datetime import datetime
-
 
 event_api = Blueprint("events_api", __name__)
+
+
+def get_event_dictionary(event):
+    """Get event dictionary from SQLAlchemy object."""
+    s = g.db.session
+    City = g.db.entity('cities')
+    Institution = g.db.entity('institutions')
+    evt = {}
+    evt['date'] = event.date.strftime("%Y-%m-%d")
+    inst = s.query(Institution).filter(Institution.id == event.institution_id)
+    inst = inst.one()
+    ies = {"name": inst.name, "address": inst.address}
+    evt['institution'] = ies
+    city = s.query(City).filter(City.cname == inst.city).one()
+    evt['cname'] = city.cname
+    evt['city'] = city.name
+    return evt
+
+
+@event_api.route('/event', methods=['GET'])
+def get_next_event():
+    """Retrieve the next event."""
+    Event = g.db.entity('events')
+    today = datetime.today()
+    q = g.db.session.query(Event).filter(Event.date >= today)
+    event = q.order_by(ascending(Event.date)).first()
+    return jsonify(get_event_dictionary(event)), 200
 
 
 @event_api.route('/event', methods=['POST'])
@@ -48,18 +75,7 @@ def get_events():
     date = datetime.today()
     s = g.db.session
     Event = g.db.entity('events')
-    City = g.db.entity('cities')
-    Institution = g.db.entity('institutions')
     events = s.query(Event).filter(Event.date >= date)
     for e in events:
-        evt = {}
-        evt['date'] = e.date.strftime("%Y-%m-%d")
-        inst = s.query(Institution).filter(Institution.id == e.institution_id)
-        inst = inst.one()
-        ies = {"name": inst.name, "address": inst.address}
-        evt['institution'] = ies
-        city = s.query(City).filter(City.cname == inst.city).one()
-        evt['cname'] = city.cname
-        evt['city'] = city.name
-        result.append(evt)
+        result.append(get_event_dictionary(e))
     return jsonify(result), 200
