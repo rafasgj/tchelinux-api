@@ -27,6 +27,10 @@ Manages users and their attributes in the database.
 
 * GET: Terminates user session.
 
+### User Object Schema
+
+> TODO: Add user schema.
+
 ## City
 
 Manage cities in the database.

@@ -3,7 +3,8 @@
 from behave import given, when, then
 import json
 
-from features.steps.common import verify_response
+from features.steps.common import (
+    verify_response, add_authentication, user_register, user_login)
 
 
 @given('an unregistered user name "{name}" and email "{email}"')
@@ -32,10 +33,7 @@ def _given_some_registered_users(context):
     for row in context.table:
         text = request.format(name=row['name'], email=row['email'],
                               password=row['password'])
-        data = json.loads(text)
-        context.response = context.client.post('/user', data=data,
-                                               follow_redirects=True)
-        verify_response(context.response, 201)
+        user_register(context, **(json.loads(text)))
 
 
 @when('the user "{email}" logs in with password "{password}"')
@@ -54,20 +52,12 @@ def _given_or_then_authentication_code_is_generated(context):
 
 @given('the user "{email}" has authenticated in the system')
 def _given_user_is_authenticated(context, email):
-    request = '{{"name":"Someone", "email":"{email}", "password":"1234"}}'
-    data = json.loads(request.format(email=email))
-    response = context.client.post('/user', data=data, follow_redirects=True)
-    verify_response(response, 201)
-    data = {"email": email, "password": 1234}
-    response = context.client.post('/login', data=data, follow_redirects=True)
-    verify_response(response, 200)
-    res = json.loads(response.data)
+    user_register(context, email=email, password=1234, role="user")
+    res = user_login(context, email, 1234)
     context.authentication = res["access_token"]
 
 
 @when('the user ends its session')
 def _when_end_user_session(context):
-    headers = {}
-    if hasattr(context, 'authentication'):
-        headers["Authorization"] = "Bearer {}".format(context.authentication)
+    headers = add_authentication(context)
     context.response = context.client.get('/logout', headers=headers)

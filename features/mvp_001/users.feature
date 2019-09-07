@@ -19,7 +19,7 @@ Scenario: Failed authentication
         | name     | email                 | password |
         | The User | theuser@tchelinux.org | 1234     |
     When the user "theuser@tchelinux.org" logs in with password "7654"
-    Then the operation fails with code 400
+    Then the operation exits with code 400
 
 Scenario: Terminate session of an authenticated user
     Given the user "theuser@tchelinux.org" has authenticated in the system
@@ -28,4 +28,4 @@ Scenario: Terminate session of an authenticated user
 
 Scenario: Terminate session of a non-authenticated user
     When the user ends its session
-    Then the operation fails with code 401
+    Then the operation exits with code 401

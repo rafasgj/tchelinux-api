@@ -1,20 +1,19 @@
 """Implement steps related to the City objects behavior."""
 
 from behave import given, when
-from features.steps.common import verify_response, post_json_data
+from features.steps.common import (
+    verify_response, post_json_data, add_authentication)
 
 
-def __add_city_to_database(client, cityname, cname):
+def __add_city_to_database(context, cityname, cname):
     request = {
         "name": cityname,
         "cname": cname
     }
-    return client.post('/city', data=request, follow_redirects=True)
+    headers = add_authentication(context)
+    return context.client.post('/city', data=request, headers=headers,
+                               follow_redirects=True)
 
-
-#
-#
-#
 
 @given('a database with no cities')
 def _given_empty_database(context):
@@ -24,19 +23,21 @@ def _given_empty_database(context):
 
 @when('I add the city "{cityname}" with cname "{cname}"')
 def _when_adding_a_city(context, cityname, cname):
-    context.response = __add_city_to_database(context.client, cityname, cname)
-    verify_response(context.response, 201)
+    context.response = __add_city_to_database(context, cityname, cname)
 
 
 @when('I add a city with the JSON data')
 def _when_adding_a_city_with_json(context):
-    post_json_data(context.client, '/city', context.text)
+    context.response = post_json_data(context, '/city')
 
 
 @given('the city "{cityname}" with cname "{cname}" exists in the database')
 def _given_database_has_city(context, cityname, cname):
-    context.response = __add_city_to_database(context.client, cityname, cname)
-    verify_response(context.response, 201)
+    step = 'given the admin "{email}" has authenticated in the system'
+    context.execute_steps(step.format(email="admin@local"))
+    response = __add_city_to_database(context, cityname, cname)
+    verify_response(response, 201)
+    context.execute_steps('when the user ends its session')
 
 
 @when('I want to list all cities in the database')

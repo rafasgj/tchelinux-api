@@ -22,7 +22,6 @@ def add_user():
     q = g.db.session.query(User).filter(User.email == fields['email'])
     if q.count() > 0:
         return "Email {} already in use.".format(fields['email']), 400
-
     user = User(**fields)
     save_object(user)
     return "OK", 201
@@ -47,7 +46,7 @@ def login():
             return "Username/Password do not match.", 400
 
     # Identity can be any data that is json serializable
-    access_token = create_access_token(identity=user.email)
+    access_token = create_access_token(identity={"role": user.role})
     return jsonify(access_token=access_token), 200
 
 
@@ -55,5 +54,9 @@ def login():
 @jwt_required
 def logout():
     """Terminate user session."""
-    current_user = get_jwt_identity()
-    return jsonify(logged_in_as=current_user), 200
+    # TODO: Actually implement blacklisting identities.
+    role = get_jwt_identity().get('role', None)
+    if role is None:
+        return jsonify("User not logged in."), 401
+    else:
+        return jsonify("OK"), 200

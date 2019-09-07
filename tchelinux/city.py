@@ -3,15 +3,21 @@
 from flask import (g, jsonify, Blueprint)
 
 from tchelinux.util import (
-    orm_as_dict, extract_fields_from_request, save_object)
+    orm_as_dict, extract_fields_from_request, save_object, administrator_only)
+
+from flask_jwt_extended import jwt_required
 
 
 city_api = Blueprint("city_api", __name__)
 
 
 @city_api.route('/city', methods=['POST'])
+@jwt_required
+@administrator_only
 def post_city():
     """Add a new city to the database."""
+    # TODO: Check how is this used?
+
     errors = []
     data = extract_fields_from_request(['cname', 'name'], errors)
     if errors:

@@ -32,6 +32,7 @@ def upgrade():
         sa.Column('email', sa.String, unique=True),
         sa.Column('name', sa.String, nullable=False),
         sa.Column('password', sa.String, nullable=False),
+        sa.Column('role', sa.String, nullable=False, server_default="user"),
     )
     op.create_table(
         'cities',

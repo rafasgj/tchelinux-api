@@ -22,7 +22,7 @@ def _given_no_institution_exits(context):
 
 @when('I add the institution from JSON data')
 def _when_adding_an_institution_from_json(context):
-    post_json_data(context.client, '/institution', context.text)
+    context.response = post_json_data(context, '/institution')
 
 
 @when('I add the institution')

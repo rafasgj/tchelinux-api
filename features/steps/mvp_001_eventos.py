@@ -21,7 +21,7 @@ def _when_adding_an_event_with_JSON(context, institution, days):
     request = """{{"institution": "{institution}", "date": "{date}"}}"""
     date = datetime.today() + timedelta(days=days)
     request = request.format(institution=institution, date=date)
-    context.response = post_json_data(context.client, '/event', request)
+    context.response = post_json_data(context, '/event', request)
     verify_response(context.response, 201)
 
 
@@ -29,8 +29,8 @@ def _when_adding_an_event_with_JSON(context, institution, days):
 def _given_an_event(context, institution, days):
     request = """{{"institution": "{institution}", "date": "{date}"}}"""
     date = datetime.today() + timedelta(days=days)
-    request = request.format(institution=institution, date=date)
-    verify_response(post_json_data(context.client, '/event', request), 201)
+    context.text = request.format(institution=institution, date=date)
+    verify_response(post_json_data(context, '/event'), 201)
 
 
 @when('I ask for future events')
