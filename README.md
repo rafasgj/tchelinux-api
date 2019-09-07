@@ -28,8 +28,35 @@ Manages users and their attributes in the database.
 * GET: Terminates user session.
 
 ### User Object Schema
-
-> TODO: Add user schema.
+```json
+{
+    "type": "object",
+    "description": "A city object.",
+    "required": ["name", "email", "password"],
+    "properties": {
+        "email": {
+            "type": "string",
+            "description": "The user email, that uniquely identifies the user.",
+            "format": "email",
+            "examples": ["somebody@somewhere.org"]
+        },
+        "name": {
+            "type": "string",
+            "description": "The name, as will appear in any document.",
+            "examples": ["John Doe"]
+        },
+        "password": {
+            "type": "string",
+            "description": "The user password."
+        },
+        "role": {
+            "enum": ["user", "admin"],
+            "description": "The user role on the system.",
+            "examples": ["John Doe"]
+        }
+    }
+}
+```
 
 ## City
 
