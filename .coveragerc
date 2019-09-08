@@ -1,0 +1,9 @@
+[run]
+omit =
+	*/tchelinux-api/*
+	*/features/*
+
+[report]
+omit =
+	*/tchelinux-api/*
+	*/features/*
