@@ -9,6 +9,8 @@ from api import connect_db
 def verify_response(response, status_code):
     """Verify if response has the given status_code."""
     assert response is not None
+    # print("CODES", response.status_code, status_code)
+    # print("RESPONSE", response.data)
     assert response.status_code == status_code
 
 
@@ -95,6 +97,6 @@ def _then_authentication_succeeds(context):
     verify_response(context.response, 200)
 
 
-@then(u'the operation exits with code {http_code:d}')
+@then('the operation exits with code {http_code:d}')
 def _then_operation_exits_with_code(context, http_code):
     verify_response(context.response, http_code)

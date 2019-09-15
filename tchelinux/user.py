@@ -6,6 +6,8 @@ from tchelinux.util import (extract_fields_from_request, save_object)
 from flask_jwt_extended import (
     jwt_required, create_access_token, get_jwt_identity)
 
+from tchelinux.token import add_token_to_database, revoke_token
+
 
 user_api = Blueprint("user_api", __name__)
 
@@ -30,6 +32,7 @@ def add_user():
 @user_api.route('/login', methods=['POST'])
 def login():
     """Authenticate user in the system."""
+    from api import api
     errors = []
     fields = extract_fields_from_request(['email', 'password'], errors)
     if errors:
@@ -38,16 +41,27 @@ def login():
     s = g.db.session
     User = g.db.entity('users')
     q = s.query(User).filter(User.email == fields['email'])
+    ret = {"error": "Username/Password do not match."}
     if q.count() != 1:
-        return "Username/Password do not match.", 400
+        return jsonify(ret), 401
     else:
         user = q.one()
         if user.password != fields['password']:
-            return "Username/Password do not match.", 400
+            return jsonify(ret), 401
 
     # Identity can be any data that is json serializable
-    access_token = create_access_token(identity={"role": user.role})
-    return jsonify(access_token=access_token), 200
+    # TODO: check out how/why use refresh tokens.
+    identity = {"username": user.email, "role": user.role}
+    access_token = create_access_token(identity=identity)
+    # refresh_token = create_refresh_token(identity=identity)
+
+    add_token_to_database(access_token, api.config['JWT_IDENTITY_CLAIM'])
+    # add_token_to_database(refresh_token, api.config['JWT_IDENTITY_CLAIM'])
+
+    # ret = {"access_token": access_token, "refresh_token": refresh_token}
+    ret = {"access_token": access_token}
+
+    return jsonify(ret), 200
 
 
 @user_api.route('/logout')
@@ -55,8 +69,8 @@ def login():
 def logout():
     """Terminate user session."""
     # TODO: Actually implement blacklisting identities.
-    role = get_jwt_identity().get('role', None)
-    if role is None:
+    user_identity = get_jwt_identity()
+    if user_identity is None:
         return jsonify("User not logged in."), 401
     else:
-        return jsonify("OK"), 200
+        return revoke_token(user_identity)

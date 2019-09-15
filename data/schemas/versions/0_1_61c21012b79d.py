@@ -25,6 +25,7 @@ def upgrade():
         - Create table 'cities'.
         - Create table 'institutions'.
         - Create table 'users'.
+        - Create tabel 'tokens'.
     """
     op.create_table(
         'users',
@@ -52,11 +53,22 @@ def upgrade():
         sa.Column('date', sa.Date, primary_key=True),
         sa.Column('institution_id', sa.Integer)
     )
+    op.create_table(
+        'tokens',
+        sa.Column('id', sa.Integer, primary_key=True, autoincrement=True),
+        sa.Column('jti', sa.String(36), nullable=False),
+        sa.Column('type', sa.String(10), nullable=False),
+        sa.Column('revoked', sa.Boolean, nullable=False),
+        sa.Column('expires', sa.Date, nullable=False),
+        sa.Column('username', sa.String(50), nullable=False),
+    )
     # Create foreign keys.
     op.create_foreign_key("fk_intituicao_city", "institutions", "cities",
                           ["city"], ['cname'], ondelete="CASCADE")
     op.create_foreign_key("fk_event_institutions", "events", "institutions",
                           ["institution_id"], ['id'], ondelete="CASCADE")
+    op.create_foreign_key("fk_token_user", "tokens", "users",
+                          ["username"], ['email'], ondelete="CASCADE")
 
 
 def downgrade():

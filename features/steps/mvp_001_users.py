@@ -57,7 +57,8 @@ def _given_user_is_authenticated(context, email):
     context.authentication = res["access_token"]
 
 
+@given('the user ends its session')
 @when('the user ends its session')
-def _when_end_user_session(context):
+def _given_or_when_end_user_session(context):
     headers = add_authentication(context)
     context.response = context.client.get('/logout', headers=headers)
