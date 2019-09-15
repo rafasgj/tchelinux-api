@@ -13,6 +13,9 @@ to verify access.
 
 Manages users and their attributes in the database.
 
+Once the user logs in, a JWT access token is provided, and should be used in
+subsequent requests for the API.
+
 ### Endpoints
 
 > /user
