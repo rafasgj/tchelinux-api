@@ -29,7 +29,7 @@ def _when_adding_an_event_with_JSON(context, institution, days):
 def _given_an_event(context, institution, days):
     request = """{{"institution": "{institution}", "date": "{date}"}}"""
     date = datetime.today() + timedelta(days=days)
-    context.text = request.format(institution=institution, date=date)
+    context.request = request.format(institution=institution, date=date)
     verify_response(post_json_data(context, '/event'), 201)
 
 
@@ -43,6 +43,7 @@ def _when_retrieving_events(context):
 def _then_json_added_with_date_is(context, days):
     observed = context.response.get_json(force=True)
     date = (datetime.today() + timedelta(days=days)).strftime("%Y-%m-%d")
+    print("CONTEXT", context.text)
     expected = json.loads(context.text)
     if type(expected) == list:
         expected[0]['date'] = date

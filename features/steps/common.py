@@ -16,7 +16,10 @@ def verify_response(response, status_code):
 
 def post_json_data(context, endpoint):
     """Make a POST using JSON data to an endpoint."""
-    data = json.loads(context.text)
+    if hasattr(context, "request"):
+        data = json.loads(context.request)
+    else:
+        data = json.loads(context.text)
     headers = add_authentication(context)
     response = context.client.post(endpoint, json=data, headers=headers,
                                    follow_redirects=True)

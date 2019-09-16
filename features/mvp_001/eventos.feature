@@ -59,7 +59,12 @@ Scenario: List next event.
                 "address": "R. Livre, 1234",
                 "latitude": -30.0281574,
                 "longitude": -51.2308308
-            }
+            },
+            "rooms": [
+                { "number": "1", "topic": "Room 1"},
+                { "number": "2", "topic": "Room 2"},
+                { "number": "3", "topic": "Room 3"}
+            ]
         }
         """
 
@@ -88,7 +93,12 @@ Scenario: List next events.
                 "address": "R. Livre, 1234",
                 "latitude": -30.0281574,
                 "longitude": -51.2308308
-            }
+            },
+            "rooms": [
+                { "number": "1", "topic": "Room 1"},
+                { "number": "2", "topic": "Room 2"},
+                { "number": "3", "topic": "Room 3"}
+            ]
         }]
         """
 
@@ -130,7 +140,12 @@ Scenario: List next event, in a specific city.
                 "address": "Av. Aberta, 765",
                 "latitude": -29.6947027,
                 "longitude": -51.11821
-            }
+            },
+            "rooms": [
+                { "number": "1", "topic": "Room 1"},
+                { "number": "2", "topic": "Room 2"},
+                { "number": "3", "topic": "Room 3"}
+            ]
         }
         """
 
@@ -172,7 +187,12 @@ Scenario: List next event, in a specific city.
                 "address": "Av. Aberta, 765",
                 "latitude": -29.6947027,
                 "longitude": -51.11821
-            }
+            },
+            "rooms": [
+                { "number": "1", "topic": "Room 1"},
+                { "number": "2", "topic": "Room 2"},
+                { "number": "3", "topic": "Room 3"}
+            ]
         }]
         """
 

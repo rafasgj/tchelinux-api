@@ -185,6 +185,27 @@ Manage events in the database.
 
 > TODO: Add event schema.
 
+Every event has one or more rooms, the Room schema is:
+
+```json
+{
+    "type": "object",
+    "description": "A room in an event.",
+    "required": ["id", "topic"],
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "The room id, as is known by the institution."
+        },
+        "topic": {
+            "type": "string",
+            "description": "The topic(s) to be covered in the room."
+        }
+    }
+}
+```
+
+
 ## Database Migration
 
 Database migration is performed using Alembic, but is automatically executed

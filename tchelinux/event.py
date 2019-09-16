@@ -19,6 +19,11 @@ def get_event_dictionary(data):
     evt['institution'] = ies
     evt['cname'] = data.cities.cname
     evt['city'] = data.cities.name
+    Room = g.db.entity('eventrooms')
+    rooms = (g.db.session.query(Room)
+             .filter(Room.eventdate == data.events.date)
+             .all())
+    evt['rooms'] = [{"number": r.number, "topic": r.topic} for r in rooms]
     return evt
 
 
@@ -91,6 +96,16 @@ def post_event():
     Event = g.db.entity('events')
     event = Event(**data)
     save_object(event)
+
+    rooms = fields.get('rooms', 3)
+    if type(rooms) == int:
+        rooms = [{"number": str(i+1), "topic": "Room {}".format(i+1)}
+                 for i in range(rooms)]
+    Room = g.db.entity('eventrooms')
+    for r in rooms:
+        r['eventdate'] = event.date
+        room = Room(**r)
+        save_object(room)
     return "OK", 201
 
 

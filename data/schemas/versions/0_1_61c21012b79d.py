@@ -25,7 +25,8 @@ def upgrade():
         - Create table 'cities'.
         - Create table 'institutions'.
         - Create table 'users'.
-        - Create tabel 'tokens'.
+        - Create table 'tokens'.
+        - Create table 'eventrooms'.
     """
     op.create_table(
         'users',
@@ -34,6 +35,15 @@ def upgrade():
         sa.Column('name', sa.String, nullable=False),
         sa.Column('password', sa.String, nullable=False),
         sa.Column('role', sa.String, nullable=False, server_default="user"),
+    )
+    op.create_table(
+        'tokens',
+        sa.Column('id', sa.Integer, primary_key=True, autoincrement=True),
+        sa.Column('jti', sa.String(36), nullable=False),
+        sa.Column('type', sa.String(10), nullable=False),
+        sa.Column('revoked', sa.Boolean, nullable=False),
+        sa.Column('expires', sa.Date, nullable=False),
+        sa.Column('username', sa.String(50), nullable=False),
     )
     op.create_table(
         'cities',
@@ -54,16 +64,14 @@ def upgrade():
     op.create_table(
         'events',
         sa.Column('date', sa.Date, primary_key=True),
-        sa.Column('institution_id', sa.Integer)
+        sa.Column('institution_id', sa.Integer, nullable=False),
     )
     op.create_table(
-        'tokens',
+        'eventrooms',
         sa.Column('id', sa.Integer, primary_key=True, autoincrement=True),
-        sa.Column('jti', sa.String(36), nullable=False),
-        sa.Column('type', sa.String(10), nullable=False),
-        sa.Column('revoked', sa.Boolean, nullable=False),
-        sa.Column('expires', sa.Date, nullable=False),
-        sa.Column('username', sa.String(50), nullable=False),
+        sa.Column('eventdate', sa.Date, nullable=False),
+        sa.Column('number', sa.String, nullable=False),
+        sa.Column('topic', sa.String, nullable=False),
     )
     # Create foreign keys.
     op.create_foreign_key("fk_intituicao_city", "institutions", "cities",
@@ -72,11 +80,15 @@ def upgrade():
                           ["institution_id"], ['id'], ondelete="CASCADE")
     op.create_foreign_key("fk_token_user", "tokens", "users",
                           ["username"], ['email'], ondelete="CASCADE")
+    op.create_foreign_key("fk_event_room", "eventrooms", "events",
+                          ["eventdate"], ['date'], ondelete="CASCADE")
 
 
 def downgrade():
     """Downgrade database to previous version."""
+    op.drop_table('eventrooms')
     op.drop_table('events')
     op.drop_table('institutions')
     op.drop_table('cities')
     op.drop_table('tokens')
+    op.drop_table('users')
