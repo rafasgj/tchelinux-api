@@ -48,8 +48,8 @@ def _then_json_added_with_date_is(context, days):
         expected[0]['date'] = date
     else:
         expected['date'] = date
-    print("EXPECTED", expected)
-    print("OBSERVED", observed)
+    # print("EXPECTED", expected)
+    # print("OBSERVED", observed)
     assert expected == observed
 
 
