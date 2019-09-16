@@ -6,3 +6,4 @@ sqlalchemy-utils == 0.34.2
 pg8000 == 1.13.2
 flask-jwt-extended[asymmetric_crypto] == 3.22.0
 coverage == 4.5.4
+haversine == 2.1.2

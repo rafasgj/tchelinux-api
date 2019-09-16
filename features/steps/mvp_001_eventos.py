@@ -48,8 +48,8 @@ def _then_json_added_with_date_is(context, days):
         expected[0]['date'] = date
     else:
         expected['date'] = date
-    # print("EXPECTED", expected)
-    # print("OBSERVED", observed)
+    print("EXPECTED", expected)
+    print("OBSERVED", observed)
     assert expected == observed
 
 
@@ -62,4 +62,11 @@ def _when_get_next_event(context):
 @when('I ask for the next event in the city "{city}"')
 def _when_get_next_event_in_city(context, city):
     context.response = context.client.get('/event/{}'.format(city))
+    verify_response(context.response, 200)
+
+
+@when('I ask for the next event {dist:d} km closer to {lat:g},{lon:g}')
+def step_impl(context, dist, lat, lon):
+    request = '/event/{}/{}/{}'.format(lat, lon, dist)
+    context.response = context.client.get(request)
     verify_response(context.response, 200)

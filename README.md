@@ -171,13 +171,15 @@ Manage events in the database.
 
 * GET: Retrieve the next event programmed for the given city.
 
+> /events/<latitude>/<longitude>/<distance>
+
+* GET: Retrieve the next programmed events closer than the given distance.
+
 > TODO: All the remaining endpoints are not yet implemented.
 
 > /events/<latitude>/<longitude>
 
 * GET: Retrieve the next programmed events closer than 150Km.
-
-> /events/<latitude>/<longitude>/<distance>
 
 ### Event Object Schema
 

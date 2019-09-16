@@ -3,7 +3,7 @@
 from flask import (g, jsonify, Blueprint)
 from datetime import datetime
 from sqlalchemy import asc as ascending
-
+from haversine import haversine
 from tchelinux.util import (extract_fields_from_request, save_object)
 
 
@@ -47,6 +47,20 @@ def get_next_event(city=None):
     Event = g.db.entity('events')
     event = q.order_by(ascending(Event.date)).first()
     return jsonify(get_event_dictionary(event)), 200
+
+
+@event_api.route('/event/<lat>/<lon>/<dist>', methods=['GET'])
+def get_next_event_closer(lat, lon, dist=150):
+    """Retrieve the next event."""
+    def closer_than(evt, max_dist):
+        a = evt.institutions.latitude
+        b = evt.institutions.longitude
+        return haversine((float(lat), float(lon)), (a, b)) < (max_dist * 1.1)
+    q = _query_next_events()
+    Event = g.db.entity('events')
+    events = q.order_by(ascending(Event.date)).all()
+    events = [e for e in events if closer_than(e, float(dist))]
+    return jsonify([get_event_dictionary(e) for e in events]), 200
 
 
 @event_api.route('/event', methods=['POST'])

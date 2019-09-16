@@ -134,6 +134,49 @@ Scenario: List next event, in a specific city.
         }
         """
 
+Scenario: List next event, in a specific city.
+    Given the city "Porto Alegre" with cname "poa" exists in the database
+        And an institution exists in the database
+            """
+            {
+                "nick": "tchelinuxu",
+                "name": "Universidade Tchelinux",
+                "address": "R. Livre, 1234",
+                "city": "poa",
+                "latitude": -30.0281574,
+                "longitude": -51.2308308
+            }
+            """
+        And the city "Novo Hamburgo" with cname "nh" exists in the database
+        And an institution exists in the database
+            """
+            {
+                "nick": "opensource",
+                "name": "Faculdades Open Source",
+                "address": "Av. Aberta, 765",
+                "city": "nh",
+                "latitude": -29.6947027,
+                "longitude": -51.11821
+            }
+            """
+        And there is an event for "tchelinuxu", 40 days from now
+        And there is an event for "opensource", 60 days from now
+    When I ask for the next event 15 km closer to -29.7616438,-51.1514848
+    Then with a date 60 days in the future, the resulting JSON is
+        """
+        [{
+            "cname": "nh",
+            "city": "Novo Hamburgo",
+            "institution": {
+                "name": "Faculdades Open Source",
+                "address": "Av. Aberta, 765",
+                "latitude": -29.6947027,
+                "longitude": -51.11821
+            }
+        }]
+        """
+
+
 # Scenario: List next events.
 #     Given the database has the institutions and cities
 #     """
