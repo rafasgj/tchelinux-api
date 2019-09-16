@@ -14,8 +14,8 @@ def get_event_dictionary(data):
     """Get event dictionary from SQLAlchemy object."""
     evt = {}
     evt['date'] = data.events.date.strftime("%Y-%m-%d")
-    ies = {"name": data.institutions.name,
-           "address": data.institutions.address}
+    ies_keys = ["name", "address", "latitude", "longitude"]
+    ies = {k: getattr(data.institutions, k) for k in ies_keys}
     evt['institution'] = ies
     evt['cname'] = data.cities.cname
     evt['city'] = data.cities.name

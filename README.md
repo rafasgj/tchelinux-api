@@ -134,6 +134,14 @@ Manage institutions in the database.
         "address": {
             "type": "string",
             "description": "The address of the institution."
+        },
+        "latitude": {
+            "type": "number",
+            "description": "The GPS latitude of the institution."
+        },
+        "longitude": {
+            "type": "number",
+            "description": "The GPS longitude of the institution."
         }
     }
 }

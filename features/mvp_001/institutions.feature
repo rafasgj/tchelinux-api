@@ -10,7 +10,9 @@ Scenario: Add an institution to a database.
             "nick": "tchelinuxu",
             "name": "Universidade Tchelinux",
             "address": "R. Livre, 1234",
-            "city": "poa"
+            "city": "poa",
+            "latitude": -30.0281574,
+            "longitude": -51.2308308
         }
         """
     Then there is 1 item in the table institutions
@@ -24,7 +26,9 @@ Scenario: Add an institution to a database, from JSON data.
             "nick": "tchelinuxu",
             "name": "Universidade Tchelinux",
             "address": "R. Livre, 1234",
-            "city": "poa"
+            "city": "poa",
+            "latitude": -30.0281574,
+            "longitude": -51.2308308
         }
         """
     Then there is 1 item in the table institutions
@@ -37,7 +41,9 @@ Scenario: List institutions in a city, by city code.
                 "nick": "tchelinuxu",
                 "name": "Universidade Tchelinux",
                 "address": "R. Livre, 1234",
-                "city": "poa"
+                "city": "poa",
+                "latitude": -30.0281574,
+                "longitude": -51.2308308
             }
             """
     When I want to list all institutions in the city "poa"
@@ -47,7 +53,9 @@ Scenario: List institutions in a city, by city code.
             "nick": "tchelinuxu",
             "name": "Universidade Tchelinux",
             "address": "R. Livre, 1234",
-            "city": "poa"
+            "city": "poa",
+            "latitude": -30.0281574,
+            "longitude": -51.2308308
         }]
         """
 
@@ -59,7 +67,9 @@ Scenario: List institutions in a city, by city name.
                 "nick": "tchelinuxu",
                 "name": "Universidade Tchelinux",
                 "address": "R. Livre, 1234",
-                "city": "poa"
+                "city": "poa",
+                "latitude": -30.0281574,
+                "longitude": -51.2308308
             }
             """
     When I want to list all institutions in the city "Porto Alegre"
@@ -69,6 +79,8 @@ Scenario: List institutions in a city, by city name.
             "nick": "tchelinuxu",
             "name": "Universidade Tchelinux",
             "address": "R. Livre, 1234",
-            "city": "poa"
+            "city": "poa",
+            "latitude": -30.0281574,
+            "longitude": -51.2308308
         }]
         """

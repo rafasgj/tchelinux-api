@@ -13,7 +13,9 @@ Scenario: Add an event to the database.
                 "nick": "tchelinuxu",
                 "name": "Universidade Tchelinux",
                 "address": "R. Livre, 1234",
-                "city": "poa"
+                "city": "poa",
+                "latitude": -30.0281574,
+                "longitude": -51.2308308
             }
             """
     When I create an event for "tchelinuxu", 120 days from now
@@ -27,7 +29,9 @@ Scenario: List next event.
                 "nick": "tchelinuxu",
                 "name": "Universidade Tchelinux",
                 "address": "R. Livre, 1234",
-                "city": "poa"
+                "city": "poa",
+                "latitude": -30.0281574,
+                "longitude": -51.2308308
             }
             """
         And the city "Novo Hamburgo" with cname "nh" exists in the database
@@ -37,7 +41,9 @@ Scenario: List next event.
                 "nick": "opensource",
                 "name": "Faculdades Open Source",
                 "address": "AV. Aberta, 765",
-                "city": "nh"
+                "city": "nh",
+                "latitude": -29.6947027,
+                "longitude": -51.11821
             }
             """
         And there is an event for "tchelinuxu", 40 days from now
@@ -50,7 +56,9 @@ Scenario: List next event.
             "city": "Porto Alegre",
             "institution": {
                 "name": "Universidade Tchelinux",
-                "address": "R. Livre, 1234"
+                "address": "R. Livre, 1234",
+                "latitude": -30.0281574,
+                "longitude": -51.2308308
             }
         }
         """
@@ -63,7 +71,9 @@ Scenario: List next events.
                 "nick": "tchelinuxu",
                 "name": "Universidade Tchelinux",
                 "address": "R. Livre, 1234",
-                "city": "poa"
+                "city": "poa",
+                "latitude": -30.0281574,
+                "longitude": -51.2308308
             }
             """
         And there is an event for "tchelinuxu", 120 days from now
@@ -75,7 +85,9 @@ Scenario: List next events.
             "city": "Porto Alegre",
             "institution": {
                 "name": "Universidade Tchelinux",
-                "address": "R. Livre, 1234"
+                "address": "R. Livre, 1234",
+                "latitude": -30.0281574,
+                "longitude": -51.2308308
             }
         }]
         """
@@ -88,7 +100,9 @@ Scenario: List next event, in a specific city.
                 "nick": "tchelinuxu",
                 "name": "Universidade Tchelinux",
                 "address": "R. Livre, 1234",
-                "city": "poa"
+                "city": "poa",
+                "latitude": -30.0281574,
+                "longitude": -51.2308308
             }
             """
         And the city "Novo Hamburgo" with cname "nh" exists in the database
@@ -98,7 +112,9 @@ Scenario: List next event, in a specific city.
                 "nick": "opensource",
                 "name": "Faculdades Open Source",
                 "address": "Av. Aberta, 765",
-                "city": "nh"
+                "city": "nh",
+                "latitude": -29.6947027,
+                "longitude": -51.11821
             }
             """
         And there is an event for "tchelinuxu", 40 days from now
@@ -111,7 +127,9 @@ Scenario: List next event, in a specific city.
             "city": "Novo Hamburgo",
             "institution": {
                 "name": "Faculdades Open Source",
-                "address": "Av. Aberta, 765"
+                "address": "Av. Aberta, 765",
+                "latitude": -29.6947027,
+                "longitude": -51.11821
             }
         }
         """

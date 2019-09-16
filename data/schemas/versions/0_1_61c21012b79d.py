@@ -43,10 +43,13 @@ def upgrade():
     op.create_table(
         'institutions',
         sa.Column('id', sa.Integer, primary_key=True, autoincrement=True),
-        sa.Column('name', sa.String),
+        sa.Column('name', sa.String, nullable=False),
         sa.Column('nick', sa.String, nullable=False),
         sa.Column('address', sa.String, nullable=False),
-        sa.Column('city', sa.String),
+        sa.Column('city', sa.String, nullable=False),
+        # Both Latitude and Longitude require more than single-precision.
+        sa.Column('latitude', sa.Float(precision=12), nullable=False),
+        sa.Column('longitude', sa.Float(precision=12), nullable=False),
     )
     op.create_table(
         'events',
@@ -76,3 +79,4 @@ def downgrade():
     op.drop_table('events')
     op.drop_table('institutions')
     op.drop_table('cities')
+    op.drop_table('tokens')

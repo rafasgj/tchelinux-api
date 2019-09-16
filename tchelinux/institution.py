@@ -20,7 +20,7 @@ def post_institution():
     City = g.db.entity('cities')
     try:
         g.db.session.query(City).filter(City.cname == data['city']).one()
-    except Exception as e:
+    except Exception:
         errors.append("City '{}' do not exist.".format(data['city']))
 
     if errors:
