@@ -33,6 +33,14 @@ def _given_an_event(context, institution, days):
     verify_response(post_json_data(context, '/event'), 201)
 
 
+@given(u'there is an event that occurred {days:d} days ago in "{institution}"')
+def _given_an_event_that_occured(context, institution, days):
+    request = """{{"institution": "{institution}", "date": "{date}"}}"""
+    date = datetime.today() - timedelta(days=days)
+    context.request = request.format(institution=institution, date=date)
+    verify_response(post_json_data(context, '/event'), 201)
+
+
 @when('I ask for future events')
 def _when_retrieving_events(context):
     context.response = context.client.get('/events')
@@ -71,3 +79,16 @@ def step_impl(context, dist, lat, lon):
     request = '/event/{}/{}/{}'.format(lat, lon, dist)
     context.response = context.client.get(request)
     verify_response(context.response, 200)
+
+
+@then('the answer has {count:d} events due in [{days}] days with')
+def _then_there_are_some_events(context, count, days):
+    days = [int(d.strip()) for d in days.split(",")]
+    observed = context.response.json
+    assert len(observed) == count
+    for i, expected in enumerate(json.loads(context.text)):
+        date = datetime.today() + timedelta(days=days[i])
+        expected['date'] = date.strftime("%Y-%m-%d")
+        print("EXPECTED", expected)
+        print("OBSERVED", observed[i])
+        assert expected == observed[i]
