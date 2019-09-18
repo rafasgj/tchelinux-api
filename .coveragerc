@@ -2,8 +2,10 @@
 omit =
 	*/tchelinux-api/*
 	*/features/*
+	*/data/*
 
 [report]
 omit =
 	*/tchelinux-api/*
 	*/features/*
+	*/data/*
