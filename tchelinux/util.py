@@ -1,6 +1,6 @@
 """Utility functions."""
 
-
+from functools import wraps
 from flask import (g, request)
 from flask_jwt_extended import get_jwt_identity
 
@@ -31,6 +31,7 @@ def save_object(object):
 
 def administrator_only(callable):
     """Create a decorator to ensure execution with administrator privileges."""
+    @wraps(callable)
     def ensure_admin(*args, **kwargs):
         role = get_jwt_identity().get('role', None)
         if role != 'admin':
