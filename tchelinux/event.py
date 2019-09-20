@@ -1,6 +1,6 @@
 """Events management endpoints."""
 
-from flask import (g, jsonify, Blueprint)
+from flask import (g, jsonify, Blueprint, request)
 from datetime import datetime
 from sqlalchemy import asc as ascending
 from haversine import haversine
@@ -104,6 +104,19 @@ def post_event():
     Room = g.db.entity('eventrooms')
     for r in rooms:
         r['eventdate'] = event.date
+        room = Room(**r)
+        save_object(room)
+    return "OK", 201
+
+
+@event_api.route('/event/<event_date>/rooms', methods=['POST', 'PUT'])
+def put_configure_event_rooms(event_date):
+    """Configure all the rooms for an event."""
+    Room = g.db.entity('eventrooms')
+    g.db.session.query(Room).filter(Room.eventdate == event_date).delete()
+    g.db.session.commit()
+    for r in request.json:
+        r['eventdate'] = datetime.strptime(event_date, '%Y-%m-%d')
         room = Room(**r)
         save_object(room)
     return "OK", 201

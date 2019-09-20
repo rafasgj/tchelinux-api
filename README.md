@@ -167,6 +167,10 @@ Manage events in the database.
 * GET: Retrieve the next programmed event.
 * POST: Create a new event.
 
+> /event/<event_date>/rooms
+
+* PUT: Configure all the rooms in the event.
+
 > /event/<city>
 
 * GET: Retrieve the next event programmed for the given city.
@@ -185,15 +189,17 @@ Manage events in the database.
 
 > TODO: Add event schema.
 
+#### Event Rooms
+
 Every event has one or more rooms, the Room schema is:
 
 ```json
 {
     "type": "object",
     "description": "A room in an event.",
-    "required": ["id", "topic"],
+    "required": ["number", "topic"],
     "properties": {
-        "id": {
+        "number": {
             "type": "string",
             "description": "The room id, as is known by the institution."
         },

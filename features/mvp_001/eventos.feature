@@ -304,3 +304,41 @@ Scenario: List next events, with some that has passed.
             ]
         }]
         """
+
+Scenario: List next event.
+    Given the city "Porto Alegre" with cname "poa" exists in the database
+        And an institution exists in the database
+            """
+            {
+                "nick": "tchelinuxu",
+                "name": "Universidade Tchelinux",
+                "address": "R. Livre, 1234",
+                "city": "poa",
+                "latitude": -30.0281574,
+                "longitude": -51.2308308
+            }
+            """
+        And there is an event for "tchelinuxu", 40 days from now
+    When I configure the event rooms to
+        | number | topic       |
+        |  A321  | Development |
+        |  A323  | SysAdmin    |
+        |  A324  | Community   |
+    Then there is an event for "tchelinuxu" that will occur in 40 days
+        """
+        {
+            "cname": "poa",
+            "city": "Porto Alegre",
+            "institution": {
+                "name": "Universidade Tchelinux",
+                "address": "R. Livre, 1234",
+                "latitude": -30.0281574,
+                "longitude": -51.2308308
+            },
+            "rooms": [
+                { "number": "A321", "topic": "Development"},
+                { "number": "A323", "topic": "SysAdmin"},
+                { "number": "A324", "topic": "Community"}
+            ]
+        }
+        """
