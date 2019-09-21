@@ -16,7 +16,7 @@ from flask_jwt_extended import JWTManager
 api = Flask(__name__)
 api.config.from_object(__name__)
 
-# These should got into a unversioned configuration file.
+# These should got into an unversioned configuration file.
 configuration = {
     'JWT_SECRET_KEY': 'super-secret',
     'JWT_BLACKLIST_ENABLED': True,
@@ -45,9 +45,9 @@ def check_if_token_revoked(decoded_token):
 def connect_db():
     """Connect to the database."""
     if api.testing:
-        initstr = "sqlite:///{database}.sqlite"
+        initstr = "sqlite:///{database}"
     else:
-        initstr = "sqlite:///{database}.sqlite"
+        initstr = "sqlite:///{database}"
         # initstr = "postgres+pg8000://{username}@localhost/{database}"
 
     initstr = initstr.format(username=api.config['DBUSERNAME'],
