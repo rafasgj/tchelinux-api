@@ -16,7 +16,7 @@ def api_client(context, *args, **kwargs):
     yield context.client
     # -- CLEANUP:
     os.close(context.db)
-    os.unlink(api.config['DATABASE'])
+    os.unlink("{}.sqlite".format(api.config['DATABASE']))
 
 
 def before_scenario(context, scenario):
