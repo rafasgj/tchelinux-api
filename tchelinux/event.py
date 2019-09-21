@@ -4,7 +4,9 @@ from flask import (g, jsonify, Blueprint, request)
 from datetime import datetime
 from sqlalchemy import asc as ascending
 from haversine import haversine
-from tchelinux.util import (extract_fields_from_request, save_object)
+from tchelinux.util import (
+    extract_fields_from_request, save_object, administrator_only)
+from flask_jwt_extended import jwt_required
 
 
 event_api = Blueprint("events_api", __name__)
@@ -51,7 +53,10 @@ def get_next_event(city=None):
     q = _query_next_events(city)
     Event = g.db.entity('events')
     event = q.order_by(ascending(Event.date)).first()
-    return jsonify(get_event_dictionary(event)), 200
+    if event is None:
+        return "No events found.", 204
+    else:
+        return jsonify(get_event_dictionary(event)), 200
 
 
 @event_api.route('/event/<lat>/<lon>/<dist>', methods=['GET'])
@@ -69,6 +74,8 @@ def get_next_event_closer(lat, lon, dist=150):
 
 
 @event_api.route('/event', methods=['POST'])
+@jwt_required
+@administrator_only
 def post_event():
     """Add a new event to the database."""
     errors = []
@@ -110,6 +117,8 @@ def post_event():
 
 
 @event_api.route('/event/<event_date>/rooms', methods=['POST', 'PUT'])
+@jwt_required
+@administrator_only
 def put_configure_event_rooms(event_date):
     """Configure all the rooms for an event."""
     Room = g.db.entity('eventrooms')

@@ -5,7 +5,7 @@ Feature: List eventos.
     As a participant, I want to know which events occur near my city.
     As a participant, I want to know the details of a specific event.
 
-Scenario: Add an event to the database.
+Scenario: Fail to add an event to the database, due do limited access.
     Given the city "Porto Alegre" with cname "poa" exists in the database
         And an institution exists in the database
             """
@@ -19,7 +19,25 @@ Scenario: Add an event to the database.
             }
             """
     When I create an event for "tchelinuxu", 120 days from now
-    Then there is 1 item in the table events
+    Then the operation exits with code 401
+
+Scenario: Add an event to the database.
+    Given the city "Porto Alegre" with cname "poa" exists in the database
+        And an institution exists in the database
+            """
+            {
+                "nick": "tchelinuxu",
+                "name": "Universidade Tchelinux",
+                "address": "R. Livre, 1234",
+                "city": "poa",
+                "latitude": -30.0281574,
+                "longitude": -51.2308308
+            }
+            """
+        And the admin "theadmin@tchelinux.org" has authenticated in the system
+    When I create an event for "tchelinuxu", 120 days from now
+    Then the operation exits with code 201
+        And there is 1 item in the table events
 
 Scenario: List next event.
     Given the city "Porto Alegre" with cname "poa" exists in the database
@@ -305,7 +323,7 @@ Scenario: List next events, with some that has passed.
         }]
         """
 
-Scenario: List next event.
+Scenario: Configure rooms in an event.
     Given the city "Porto Alegre" with cname "poa" exists in the database
         And an institution exists in the database
             """
@@ -319,6 +337,7 @@ Scenario: List next event.
             }
             """
         And there is an event for "tchelinuxu", 40 days from now
+        And the admin "theadmin@tchelinux.org" has authenticated in the system
     When I configure the event rooms to
         | number | topic       |
         |  A321  | Development |

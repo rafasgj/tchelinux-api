@@ -2,7 +2,8 @@
 
 from behave import given, when, then
 import json
-from features.steps.common import verify_response, post_json_data
+from features.steps.common import (
+    verify_response, post_json_data, add_authentication, login_admin)
 from datetime import datetime, timedelta
 
 
@@ -17,9 +18,10 @@ def _when_adding_an_event(context, institution, days):
     request = """{{"institution": "{institution}", "date": "{date}"}}"""
     date = datetime.today() + timedelta(days=days)
     data = json.loads(request.format(institution=institution, date=date))
+    headers = add_authentication(context)
     context.response = context.client.post('/event', data=data,
+                                           headers=headers,
                                            follow_redirects=True)
-    verify_response(context.response, 201)
 
 
 @when('I use JSON to add an event for "{institution}", {days:d} days from now')
@@ -28,10 +30,10 @@ def _when_adding_an_event_with_JSON(context, institution, days):
     date = datetime.today() + timedelta(days=days)
     request = request.format(institution=institution, date=date)
     context.response = post_json_data(context, '/event', request)
-    verify_response(context.response, 201)
 
 
 @given('there is an event for "{institution}", {days:d} days from now')
+@login_admin
 def _given_an_event(context, institution, days):
     request = """{{"institution": "{institution}", "date": "{date}"}}"""
     date = datetime.today() + timedelta(days=days)
@@ -41,6 +43,7 @@ def _given_an_event(context, institution, days):
 
 
 @given('there is an event that occurred {days:d} days ago in "{institution}"')
+@login_admin
 def _given_an_event_that_occured(context, institution, days):
     request = """{{"institution": "{institution}", "date": "{date}"}}"""
     date = datetime.today() - timedelta(days=days)

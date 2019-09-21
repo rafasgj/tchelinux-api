@@ -1,17 +1,16 @@
 """Implement steps related with Institution objects behavior."""
 
 from behave import given, when, then
-from features.steps.common import verify_response, post_json_data
+from features.steps.common import (
+    verify_response, post_json_data, add_authentication, login_admin)
 import json
 
 
-def __add_institution(text, client):
-    institution = json.loads(text)
-    return client.post('/institution', data=institution, follow_redirects=True)
-
-#
-#
-#
+def __add_institution(context):
+    institution = json.loads(context.text)
+    headers = add_authentication(context)
+    return context.client.post('/institution', data=institution,
+                               headers=headers, follow_redirects=True)
 
 
 @given('no institution exists')
@@ -27,7 +26,7 @@ def _when_adding_an_institution_from_json(context):
 
 @when('I add the institution')
 def _when_add_institution(context):
-    context.response = __add_institution(context.text, context.client)
+    context.response = __add_institution(context)
     verify_response(context.response, 201)
 
 
@@ -38,8 +37,9 @@ def _then_there_is_N_institutions(context, count):
 
 
 @given('an institution exists in the database')
+@login_admin
 def _given_an_institution(context):
-    verify_response(__add_institution(context.text, context.client), 201)
+    verify_response(__add_institution(context), 201)
 
 
 @when('I want to list all institutions in the city "{city}"')

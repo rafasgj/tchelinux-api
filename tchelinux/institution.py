@@ -1,16 +1,17 @@
 """Institution Endpoints."""
 
-
 from flask import (g, jsonify, Blueprint)
-
 from tchelinux.util import (
-    orm_as_dict, extract_fields_from_request, save_object)
+    orm_as_dict, extract_fields_from_request, save_object, administrator_only)
+from flask_jwt_extended import jwt_required
 
 
 institution_api = Blueprint("institution_api", __name__)
 
 
 @institution_api.route('/institution', methods=['POST'])
+@jwt_required
+@administrator_only
 def post_institution():
     """Retrieve a list of all cities."""
     errors = []
