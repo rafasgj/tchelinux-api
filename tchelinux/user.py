@@ -68,7 +68,6 @@ def login():
 @jwt_required
 def logout():
     """Terminate user session."""
-    # TODO: Actually implement blacklisting identities.
     user_identity = get_jwt_identity()
     if user_identity is None:
         return jsonify("User not logged in."), 401

@@ -1,7 +1,7 @@
 """Functions used to manage catalogs."""
 
 from sqlalchemy_utils import database_exists
-
+from functools import lru_cache
 from sqlalchemy import create_engine, event, MetaData
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import Engine
@@ -93,7 +93,7 @@ class Database(object):
         """Upgrade catalog to the latest version."""
         try:
             self.open()
-        except UnexpectedDatabaseVersion as e:
+        except UnexpectedDatabaseVersion:
             self.__perform_upgrade()
         except Exception:
             raise
@@ -127,8 +127,13 @@ class Database(object):
             self.__session = sessionmaker(bind=self.__engine)()
             self.__load_schema()
 
+    @lru_cache(maxsize=20)
     def entity(self, entity):
-        """Obtain an entity class for a specific table."""
+        """Obtain an entity class for a specific table.
+
+        The use of a cache is not due to performance, but to avoid creating
+        multiple instances of the entity types.
+        """
         return type(entity, (self.__Base,),
                     {'__table__': self.__meta.tables[entity]})
 

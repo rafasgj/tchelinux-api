@@ -16,8 +16,6 @@ city_api = Blueprint("city_api", __name__)
 @administrator_only
 def post_city():
     """Add a new city to the database."""
-    # TODO: Check how is this used?
-
     errors = []
     data = extract_fields_from_request(['cname', 'name'], errors)
     if errors:
