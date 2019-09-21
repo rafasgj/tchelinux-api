@@ -2,7 +2,7 @@
 
 from behave import given, when
 from features.steps.common import (
-    verify_response, post_json_data, add_authentication)
+    verify_response, post_json_data, add_authentication, login_admin)
 
 
 def __add_city_to_database(context, cityname, cname):
@@ -32,9 +32,8 @@ def _when_adding_a_city_with_json(context):
 
 
 @given('the city "{cityname}" with cname "{cname}" exists in the database')
+@login_admin
 def _given_database_has_city(context, cityname, cname):
-    step = 'given the admin "{email}" has authenticated in the system'
-    context.execute_steps(step.format(email="admin@local"))
     response = __add_city_to_database(context, cityname, cname)
     verify_response(response, 201)
     context.execute_steps('when the user ends its session')

@@ -2,8 +2,23 @@
 
 from behave import given, then
 import json
-
+from functools import wraps
 from api import connect_db
+
+
+def login_admin(callable):
+    @wraps(callable)
+    def decorator(context, *args, **kwargs):
+        # login
+        step = 'given the admin "{email}" has authenticated in the system'
+        context.execute_steps(step.format(email="admin@local"))
+        # execute
+        result = callable(context, *args, **kwargs)
+        # logout
+        context.execute_steps("given the user ends its session")
+        # return result
+        return result
+    return decorator
 
 
 def verify_response(response, status_code):
