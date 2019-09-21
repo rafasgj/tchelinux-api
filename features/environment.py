@@ -16,7 +16,6 @@ def api_client(context, *args, **kwargs):
     yield context.client
     # -- CLEANUP:
     os.close(context.db)
-    print("DATABASE", api.config['DATABASE'])
     os.unlink(format(api.config['DATABASE']))
 
 
