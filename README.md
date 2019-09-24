@@ -1,6 +1,6 @@
 # Tchelinux CMS API
 
-[![Build Status](https://travis-ci.org/rafasgj/tchelinux-api.png)](https://travis-ci.org/rafasgj/tchelinux-api.png)
+[![Build Status](https://travis-ci.org/rafasgj/tchelinux-api.png)](https://travis-ci.org/rafasgj/tchelinux-api)
 
 The Tchelinux CMS API main goal is to allow for easier management of
 Tchelinux's events.
