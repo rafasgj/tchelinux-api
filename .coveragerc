@@ -1,11 +1,11 @@
 [run]
+include = */tchelinux/*
 omit =
-	*/tchelinux-api/*
 	*/features/*
 	*/data/*
 
 [report]
+include = */tchelinux/*
 omit =
-	*/tchelinux-api/*
 	*/features/*
 	*/data/*
