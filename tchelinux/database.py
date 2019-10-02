@@ -134,6 +134,14 @@ class Database(object):
         The use of a cache is not due to performance, but to avoid creating
         multiple instances of the entity types.
         """
+        entities = {
+            "User": "users",
+            "Event": "events",
+            "Institution": "institutions",
+            "City": "cities",
+            "Token": "tokens",
+        }
+        entity = entities.get(entity, entity)
         return type(entity, (self.__Base,),
                     {'__table__': self.__meta.tables[entity]})
 
