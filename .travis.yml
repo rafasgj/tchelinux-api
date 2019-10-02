@@ -1,10 +1,16 @@
 language: python
 python:
     - "3.7"
+
 # install dependencies
 install:
-    - pip install -r requirements.txt
+    - python3 -m pip install -r dev-requirements.txt
+    - python3 -m pip install -r requirements.txt
+
 # run tests
 script:
-    - python3 -m behave
+    - python3 -m flake8 tchelinux features
+    - python3 -m coverage erase
+    - python3 -m coverage run -m behave
+    - python3 -m coverage report
 

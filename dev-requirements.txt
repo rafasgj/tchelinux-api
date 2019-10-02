@@ -1,0 +1,6 @@
+# We use flake8, since it is more annoying than pylint.
+flake8
+
+# Testing tools.
+coverage == 4.5.4
+behave == 1.2.6
