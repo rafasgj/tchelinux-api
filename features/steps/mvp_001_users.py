@@ -2,16 +2,9 @@
 
 from behave import given, when, then
 import json
-from api import connect_db
 
 from features.steps.common import (
     verify_response, add_authentication, user_register, user_login)
-
-
-@given('no user is registered')
-def _given_no_user_exist(context):
-    db = connect_db()
-    assert db.session.query(db.entity('User')).count() == 0
 
 
 @given('an unregistered user name "{name}" and email "{email}"')
@@ -24,14 +17,8 @@ def _given_password(context, password):
     context.password = password
 
 
-@when('I register with')
+@when('I create a new account')
 def _when_create_user_account(context):
-    row = context.table[0]
-    context.user = {
-        "name": row['name'],
-        "email": row['email'],
-    }
-    context.password = row['password']
     request = '{{"name":"{name}", "email":"{email}", "password":"{password}"}}'
     request = request.format(**context.user, password=context.password)
     data = json.loads(request)
@@ -49,14 +36,14 @@ def _given_some_registered_users(context):
         user_register(context, **(json.loads(text)))
 
 
-@when('I login with email "{email}" and password "{password}"')
+@when('the user "{email}" logs in with password "{password}"')
 def _given_or_when_login(context, email, password):
     data = {"email": email, "password": password}
     context.response = context.client.post('/login', data=data,
                                            follow_redirects=True)
 
 
-@then('an authentication code is generated')
+@then('authentication code is generated')
 def _given_or_then_authentication_code_is_generated(context):
     assert context.response is not None
     res = json.loads(context.response.data)

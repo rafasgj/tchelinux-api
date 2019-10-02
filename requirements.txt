@@ -5,6 +5,3 @@ sqlalchemy-utils == 0.34.2
 pg8000 == 1.13.2
 flask-jwt-extended[asymmetric_crypto] == 3.22.0
 haversine == 2.1.2
-flake8 >= 3.7.8
-flake8-docstrings
-flake8-import-order
