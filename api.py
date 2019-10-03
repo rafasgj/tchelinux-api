@@ -13,7 +13,6 @@ from tchelinux.institution import institution_api
 from tchelinux.token import is_token_revoked
 from tchelinux.user import user_api
 
-
 api = Flask(__name__)
 api.config.from_object(__name__)
 with open("apiconfig.json", "r") as cfg:

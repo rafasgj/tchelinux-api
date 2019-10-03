@@ -3,8 +3,6 @@
 import json
 from functools import wraps
 
-from api import connect_db
-
 from behave import given, then
 
 
@@ -105,6 +103,7 @@ def then_resulting_JSON_is(context):
 
 @then('there is {count:d} item in the table {table}')
 def _then_there_are_N_cities_in_database(context, table, count):
+    from api import connect_db
     db = connect_db()
     Entity = db.entity(table)
     assert db.session.query(Entity).count() == count
