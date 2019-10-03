@@ -1,12 +1,17 @@
 """Events management endpoints."""
 
-from flask import (g, jsonify, Blueprint, request)
 from datetime import datetime
-from sqlalchemy import asc as ascending
-from haversine import haversine
-from tchelinux.util import (
-    extract_fields_from_request, save_object, administrator_only)
+
+from flask import (Blueprint, g, jsonify, request)
+
 from flask_jwt_extended import jwt_required
+
+from haversine import haversine
+
+from sqlalchemy import asc as ascending
+
+from tchelinux.util import (
+    administrator_only, extract_fields_from_request, save_object)
 
 
 event_api = Blueprint("events_api", __name__)

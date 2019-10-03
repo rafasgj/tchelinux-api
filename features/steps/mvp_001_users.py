@@ -1,10 +1,11 @@
 """Steps for MVP-001: Users."""
 
-from behave import given, when, then
 import json
 
+from behave import given, then, when
+
 from features.steps.common import (
-    verify_response, add_authentication, user_register, user_login)
+    add_authentication, user_login, user_register, verify_response)
 
 
 @given('an unregistered user name "{name}" and email "{email}"')

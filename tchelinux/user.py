@@ -1,13 +1,14 @@
 """User and authentication management endpoints."""
 
-from flask import (g, jsonify, Blueprint, current_app)
-from tchelinux.util import (extract_fields_from_request, save_object)
+from collections import namedtuple
+
+from flask import (Blueprint, current_app, g, jsonify)
 
 from flask_jwt_extended import (
-    jwt_required, create_access_token, get_jwt_identity)
+    create_access_token, get_jwt_identity, jwt_required)
 
 from tchelinux.token import add_token_to_database, revoke_token
-from collections import namedtuple
+from tchelinux.util import (extract_fields_from_request, save_object)
 
 
 user_api = Blueprint("user_api", __name__)

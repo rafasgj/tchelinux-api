@@ -1,17 +1,17 @@
 """Entry point for Tchelinux CMS API."""
 
-from flask import (Flask, g)
+import json
 
-from tchelinux.database import Database
-from tchelinux.city import city_api
-from tchelinux.institution import institution_api
-from tchelinux.event import event_api
-from tchelinux.user import user_api
-from tchelinux.token import is_token_revoked
+from flask import (Flask, g)
 
 from flask_jwt_extended import JWTManager
 
-import json
+from tchelinux.city import city_api
+from tchelinux.database import Database
+from tchelinux.event import event_api
+from tchelinux.institution import institution_api
+from tchelinux.token import is_token_revoked
+from tchelinux.user import user_api
 
 
 api = Flask(__name__)
@@ -30,6 +30,7 @@ api.register_blueprint(user_api)
 
 @jwt.token_in_blacklist_loader
 def check_if_token_revoked(decoded_token):
+    """Check if token is revoked."""
     return is_token_revoked(decoded_token)
 
 
@@ -43,12 +44,12 @@ def connect_db():
 
     initstr = initstr.format(username=api.config['DBUSERNAME'],
                              database=api.config['DATABASE'])
-    db = Database(initstr)
+    api_db = Database(initstr)
     try:
-        db.create()
+        api_db.create()
     except Exception:
-        db.open()
-    return db
+        api_db.open()
+    return api_db
 
 
 @api.before_request

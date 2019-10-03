@@ -1,11 +1,11 @@
 """City management endpoints."""
 
-from flask import (g, jsonify, Blueprint)
-
-from tchelinux.util import (
-    orm_as_dict, extract_fields_from_request, save_object, administrator_only)
+from flask import (Blueprint, g, jsonify)
 
 from flask_jwt_extended import jwt_required
+
+from tchelinux.util import (
+    administrator_only, extract_fields_from_request, orm_as_dict, save_object)
 
 
 city_api = Blueprint("city_api", __name__)

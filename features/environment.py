@@ -2,9 +2,10 @@
 
 import os
 import tempfile
-from behave import fixture, use_fixture
 
 from api import api
+
+from behave import fixture, use_fixture
 
 
 @fixture

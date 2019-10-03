@@ -1,10 +1,12 @@
 """Steps for MVP 001: Eventos."""
 
-from behave import given, when, then
 import json
-from features.steps.common import (
-    verify_response, post_json_data, add_authentication, login_admin)
 from datetime import datetime, timedelta
+
+from behave import given, then, when
+
+from features.steps.common import (
+    add_authentication, login_admin, post_json_data, verify_response)
 
 
 def _compare_event_in_days(expected, observed, days):
@@ -83,7 +85,7 @@ def _when_get_next_event_in_city(context, city):
 
 
 @when('I ask for the next event {dist:d} km closer to {lat:g},{lon:g}')
-def step_impl(context, dist, lat, lon):
+def _when_ask_for_event_closer_to(context, dist, lat, lon):
     request = '/event/{}/{}/{}'.format(lat, lon, dist)
     context.response = context.client.get(request)
     verify_response(context.response, 200)

@@ -1,8 +1,9 @@
 """Implement steps related to the City objects behavior."""
 
 from behave import given, when
+
 from features.steps.common import (
-    verify_response, post_json_data, add_authentication, login_admin)
+    add_authentication, login_admin, post_json_data, verify_response)
 
 
 def __add_city_to_database(context, cityname, cname):

@@ -1,9 +1,11 @@
 """Implement steps related with Institution objects behavior."""
 
-from behave import given, when, then
-from features.steps.common import (
-    verify_response, post_json_data, add_authentication, login_admin)
 import json
+
+from behave import given, then, when
+
+from features.steps.common import (
+    add_authentication, login_admin, post_json_data, verify_response)
 
 
 def __add_institution(context):

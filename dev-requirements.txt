@@ -1,5 +1,7 @@
 # We use flake8, since it is more annoying than pylint.
 flake8
+flake8-docstrings
+flake8-import-order
 
 # Testing tools.
 coverage == 4.5.4

@@ -1,12 +1,15 @@
 """Commom tests for all steps."""
 
-from behave import given, then
 import json
 from functools import wraps
+
 from api import connect_db
+
+from behave import given, then
 
 
 def login_admin(callable):
+    """Force execution of a step with admin priviledges."""
     @wraps(callable)
     def decorator(context, *args, **kwargs):
         # login
@@ -73,7 +76,7 @@ def user_login(context, email, password):
 
 
 def user_logout(context):
-    """Performs logout of the current user."""
+    """Perform logout of the current user."""
     headers = add_authentication(context)
     response = context.client.get('/logout', headers=headers)
     verify_response(response, 200)

@@ -1,20 +1,20 @@
 """Functions used to manage catalogs."""
 
-from sqlalchemy_utils import database_exists
-from functools import lru_cache
-from sqlalchemy import create_engine, event, MetaData
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.engine import Engine
-from sqlalchemy.ext.declarative import declarative_base
-
-
+import logging
 import os
 import os.path
+from functools import lru_cache
 
-import logging
-from alembic.migration import MigrationContext
-import alembic.config
 import alembic.command
+import alembic.config
+from alembic.migration import MigrationContext
+
+from sqlalchemy import MetaData, create_engine, event
+from sqlalchemy.engine import Engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+from sqlalchemy_utils import database_exists
 
 from tchelinux.version import Version
 
