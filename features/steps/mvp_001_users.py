@@ -37,7 +37,7 @@ def _given_some_registered_users(context):
 
 
 @when('the user "{email}" logs in with password "{password}"')
-def _given_or_when_login(context, email, password):
+def _when_user_login(context, email, password):
     data = {"email": email, "password": password}
     context.response = context.client.post('/login', data=data,
                                            follow_redirects=True)
@@ -50,10 +50,10 @@ def _given_or_then_authentication_code_is_generated(context):
     context.authentication = res["access_token"]
 
 
-@given('the user "{email}" has authenticated in the system')
-def _given_user_is_authenticated(context, email):
-    user_register(context, email=email, password=1234, role="user")
-    res = user_login(context, email, 1234)
+@given('the user has no administrator priviledges')
+def _given_user_is_authenticated(context):
+    user_register(context, email="user@tchelinux", password=12345, role="user")
+    res = user_login(context, "user@tchelinux", 12345)
     context.authentication = res["access_token"]
 
 

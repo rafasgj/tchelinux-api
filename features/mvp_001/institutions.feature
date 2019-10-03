@@ -4,7 +4,7 @@ Feature: Manage institutions.
 Scenario: Add an institution to a database.
     Given the city "Porto Alegre" with cname "poa" exists in the database
         And no institution exists
-        And the admin "theadmin@tchelinux.org" has authenticated in the system
+        And the user has administrator priviledges
     When I add the institution
         """
         {
@@ -21,7 +21,7 @@ Scenario: Add an institution to a database.
 Scenario: Add an institution to a database, from JSON data.
     Given the city "Porto Alegre" with cname "poa" exists in the database
         And no institution exists
-        And the admin "theadmin@tchelinux.org" has authenticated in the system
+        And the user has administrator priviledges
     When I add the institution from JSON data
         """
         {

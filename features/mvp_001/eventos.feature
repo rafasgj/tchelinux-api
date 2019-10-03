@@ -34,7 +34,7 @@ Scenario: Add an event to the database.
                 "longitude": -51.2308308
             }
             """
-        And the admin "theadmin@tchelinux.org" has authenticated in the system
+        And the user has administrator priviledges
     When I create an event for "tchelinuxu", 120 days from now
     Then the operation exits with code 201
         And there is 1 item in the table events
@@ -337,7 +337,7 @@ Scenario: Configure rooms in an event.
             }
             """
         And there is an event for "tchelinuxu", 40 days from now
-        And the admin "theadmin@tchelinux.org" has authenticated in the system
+        And the user has administrator priviledges
     When I configure the event rooms to
         | number | topic       |
         |  A321  | Development |

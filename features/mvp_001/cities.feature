@@ -10,20 +10,20 @@ Scenario: Add city to a database, unauthenticated
 
 Scenario: Add city to a database, authenticated as an user.
     Given a database with no cities
-        And the user "theuser@tchelinux.org" has authenticated in the system
+        And the user has no administrator priviledges
     When I add the city "Porto Alegre" with cname "poa"
     Then the operation exits with code 403
 
 Scenario: Add city to a database, authenticated as an administrator.
     Given a database with no cities
-        And the admin "theadmin@tchelinux.org" has authenticated in the system
+        And the user has administrator priviledges
     When I add the city "Porto Alegre" with cname "poa"
     Then the operation exits with code 201
         And there is 1 item in the table cities
 
 Scenario: Add city to a database with JSON.
     Given a database with no cities
-        And the admin "theadmin@tchelinux.org" has authenticated in the system
+        And the user has administrator priviledges
     When I add a city with the JSON data
         """
         {"name": "Porto Alegre", "cname": "poa"}

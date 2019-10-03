@@ -10,8 +10,8 @@ def login_admin(callable):
     @wraps(callable)
     def decorator(context, *args, **kwargs):
         # login
-        step = 'given the admin "{email}" has authenticated in the system'
-        context.execute_steps(step.format(email="admin@local"))
+        step = 'Given the user has administrator priviledges'
+        context.execute_steps(step)
         # execute
         result = callable(context, *args, **kwargs)
         # logout
@@ -57,8 +57,8 @@ def user_register(context, **kwargs):
         kwargs['name'] = "Someone"
     if "email" not in kwargs:
         kwargs['email'] = "someone@local"
-    if "passwor" not in kwargs:
-        kwargs['password'] = "1234"
+    if "password" not in kwargs:
+        kwargs['password'] = "12345"
     if "role" not in kwargs:
         kwargs['role'] = "user"
     data = json.loads(user.format(**kwargs))
@@ -70,6 +70,8 @@ def user_login(context, email, password):
     """Perform user login."""
     data = {"email": email, "password": password}
     ans = context.client.post('/login', data=data, follow_redirects=True)
+    print("CODE:", ans.status_code)
+    print("MSG:", ans.data)
     verify_response(ans, 200)
     return ans.json
 
@@ -81,10 +83,9 @@ def user_logout(context):
     verify_response(response, 200)
 
 
-@given('the admin "{email}" has authenticated in the system')
-def _given_admin_is_authenticated(context, email):
-    user_register(context, email=email, password=1234, role="admin")
-    res = user_login(context, email, 1234)
+@given('the user has administrator priviledges')
+def _given_admin_is_authenticated(context):
+    res = user_login(context, "admin@tchelinux.org", 123456)
     context.authentication = res["access_token"]
 
 

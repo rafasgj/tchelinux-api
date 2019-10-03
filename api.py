@@ -3,7 +3,6 @@
 from flask import (Flask, g)
 
 from tchelinux.database import Database
-
 from tchelinux.city import city_api
 from tchelinux.institution import institution_api
 from tchelinux.event import event_api
@@ -12,21 +11,13 @@ from tchelinux.token import is_token_revoked
 
 from flask_jwt_extended import JWTManager
 
+import json
+
 
 api = Flask(__name__)
 api.config.from_object(__name__)
-
-# These should got into an unversioned configuration file.
-configuration = {
-    'JWT_SECRET_KEY': 'super-secret',
-    'JWT_BLACKLIST_ENABLED': True,
-    'JWT_BLACKLIST_TOKEN_CHECKS': ['access', 'refresh'],
-    'DBUSERNAME': 'somebody',
-    'DATABASE': 'tchelinuxcms',
-}
-for k, v in configuration.items():
-    api.config[k] = v
-# /end of configuration
+with open("apiconfig.json", "r") as cfg:
+    api.config.update(json.load(cfg))
 
 # Setup the Flask-JWT-Extended extension
 jwt = JWTManager(api)

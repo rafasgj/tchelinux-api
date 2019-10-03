@@ -22,7 +22,7 @@ Scenario: Failed authentication
     Then the operation exits with code 401
 
 Scenario: Terminate session of an authenticated user
-    Given the user "theuser@tchelinux.org" has authenticated in the system
+    Given the user has no administrator priviledges
     When the user ends its session
     Then the operation succeeds
 
@@ -31,7 +31,7 @@ Scenario: Terminate session of a non-authenticated user
     Then the operation exits with code 401
 
 Scenario: User try to access restricted services after logout
-    Given the user "theuser@tchelinux.org" has authenticated in the system
+    Given the user has administrator priviledges
         And the user ends its session
     When I add a city with the JSON data
         """
