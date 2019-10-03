@@ -24,7 +24,7 @@ def login_admin(callable):
 def verify_response(response, status_code):
     """Verify if response has the given status_code."""
     assert response is not None
-    # print("CODES", response.status_code, status_code)
+    # print("CODES (observed/expected)", response.status_code, status_code)
     # print("RESPONSE", response.data)
     assert response.status_code == status_code
 
@@ -32,8 +32,6 @@ def verify_response(response, status_code):
 def post_json_data(context, endpoint):
     """Make a POST using JSON data to an endpoint."""
     txt = context.request if hasattr(context, "request") else context.text
-    print("TXT", txt)
-    print("TYPE", type(txt))
     data = txt if type(txt) in (dict, list) else json.loads(txt)
     headers = add_authentication(context)
     response = context.client.post(endpoint, json=data, headers=headers,
@@ -70,8 +68,6 @@ def user_login(context, email, password):
     """Perform user login."""
     data = {"email": email, "password": password}
     ans = context.client.post('/login', data=data, follow_redirects=True)
-    print("CODE:", ans.status_code)
-    print("MSG:", ans.data)
     verify_response(ans, 200)
     return ans.json
 

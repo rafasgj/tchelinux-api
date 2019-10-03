@@ -36,7 +36,6 @@ def login():
     errors = []
     fields = extract_fields_from_request(['email', 'password'], errors)
     if errors:
-        print("EXIT 1")
         return jsonify(errors), 400
 
     # Identity can be any data that is json serializable
@@ -44,28 +43,22 @@ def login():
     # Verify admins ...
     passwd = current_app.config['admin'].get(fields['email'], None)
     if passwd is not None:
-        print("Got an ADMIN")
         UserProxy = namedtuple("UserProxy", ["email", "password", "role"])
         user = UserProxy(email=fields['email'],
                          password=passwd,
                          role='admin')
     else:
         # ... or users.
-        print("Got an USER")
         s = g.db.session
         User = g.db.entity('users')
         q = s.query(User).filter(User.email == fields['email'])
         ret = {"error": "Username/Password do not match."}
         if q.count() != 1:
-            print("EXIT 3")
             return jsonify(ret), 401
         else:
             user = q.one()
 
-    print("EXPECTED", user.password)
-    print("OBSERVED", fields['password'])
     if user.password != fields['password']:
-        print("EXIT 5")
         return jsonify(ret), 401
 
     # TODO: check out how/why use refresh tokens.
@@ -79,7 +72,6 @@ def login():
     # ret = {"access_token": access_token, "refresh_token": refresh_token}
     ret = {"access_token": access_token}
 
-    print("EXIT 0")
     return jsonify(ret), 200
 
 
